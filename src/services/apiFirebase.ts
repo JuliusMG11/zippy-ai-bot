@@ -1,5 +1,5 @@
 import { firestore } from '../firebase.ts';
-import { addDoc, collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, doc, getDoc, query, where, updateDoc } from 'firebase/firestore';
 
 import { SchedulePrompt, GenerateTweet } from '../types/types';
 const db = firestore;
@@ -25,7 +25,22 @@ export const getTwitterAccounts = async (uid: string) => {
 // FUNCTION FOR SAVE GENERATE PROMPT
 export const saveGeneratePrompt = async (data: SchedulePrompt, id: string) => {
     const userRef = collection(db, `schedule`);
-    await addDoc(userRef, data);
+    
+    // Check if document with this ID already exists
+    const promptQuery = query(userRef, where("id", "==", data.id));
+    const querySnapshot = await getDocs(promptQuery);
+    
+    if (!querySnapshot.empty) {
+        // Update existing document
+        const docRef = doc(db, `schedule/${querySnapshot.docs[0].id}`);
+        await updateDoc(docRef, {
+            prompt: data.prompt,
+            updated_at: data.updated_at
+        });
+    } else {
+        // Create new document
+        await addDoc(userRef, data);
+    }
 };
 
 // FUNCTION FOR SAVE GENERATE TWEET
@@ -52,6 +67,7 @@ export const fetchPrompt = async (twitterId: string) => {
     return prompt ? JSON.stringify(prompt) : null; 
     
 };
+
 
 // FUNCTION FOR GET TWEETS
 export const getTweets = async (userId: string, twitterId: string) => {

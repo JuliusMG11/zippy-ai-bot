@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './promptSection.css';
-import Select from '../UI/Select/Select.tsx';
+
+import Button from '../UI/Btn/Btn.tsx';
 
 const PromptSection = (
     {
@@ -12,66 +13,72 @@ const PromptSection = (
         generatedContent,
         schedule,
         setSchedule,
+        tweetNow,
+        updatePrompt
     }) => {
 
-    const scheduleOptions = [
-        { id: 1, name: 'every hour' },
-        { id: 2, name: 'every 2 hours' },
-    ];
+    const [editableContent, setEditableContent] = useState('');
+    const hasExistingPrompt = schedulePrompt?.id;
+    
+
+    //  const scheduleOptions = [
+    //     { id: 1, name: 'every hour' },
+    //     { id: 2, name: 'every 2 hours' },
+    // ];
+
+    // const handleSchedule = () => {
+    //     console.log(schedule);
+    // }
+
+    const handleTweetNow = () => {
+        tweetNow(editableContent);
+    }
+
+    useEffect(() => {
+        const cleanContent = generatedContent.replace(/^["']|["']$/g, '');
+        setEditableContent(cleanContent);
+    }, [generatedContent]);
+
+    const handleSavePrompt = () => {
+        updatePrompt(value);
+    };
 
     return (    
         <>
-          { schedulePrompt?.prompt ? (
-            <div className="">
-                <h3>Your prompt on this profile is set</h3>
-                <p className="py-2 font-bold text-lg">{schedulePrompt.prompt}</p>
-                <p className="py-2 font-bold text-lg">{schedulePrompt.schedule.interval}h</p>
-                <div className="flex">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Edit prompt</button>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded-md mt-4">Delete prompt</button>
-                </div>
-                <div className="pt-6">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Save prompt</button>
-                </div>
-            </div>
-          ) : (
-            <div className="">
-                <h3>No prompt found and generate your first tweet</h3>
+            <div className="pt-4 pb-12">
+                <h3 className="text-white text-lg pb-4">Write prompt for your tweet</h3>
                 <textarea 
                     value={value} 
                     onChange={onChange} 
-                    placeholder="Write the prompt"
-                    className="w-full h-30 p-2 border border-gray-300 rounded-md"
+                    placeholder="Write the prompt..."
+                    rows={3}
+                    className="w-full h-30 p-4 bg-[#18181A] rounded-lg mb-4 text-white"
                 />
-                {generatedContent && <div>{generatedContent}</div>}
-                <div className="">
-                        {/* <select 
-                            value={schedule} 
-                            onChange={(e) => setSchedule(e.target.value)}
-                            className="custom-select mt-4 p-2"
-                        >
-                            <option value="">Select your schedule</option>
-                            <option value="1">every hour</option>
-                            <option value="2">every 2 hours</option>
-                        </select> */}
-                        <Select
-                            value={schedule} 
-                            onChange={(e) => setSchedule(e.target.value)} 
-                            options={scheduleOptions}
-                            title="Set schedule"
+                <Button
+                    text="Generate tweet"
+                    type="secondary"
+                    onClick={handleGenerate}
+                    children={false}
+                />
+            </div>
+                {generatedContent ? (
+                    <div className="mt-4">
+                        <h3 className="text-white text-lg pb-4">Edit or post your final tweet</h3>
+                        <textarea 
+                            value={editableContent} 
+                            onChange={(e) => setEditableContent(e.target.value)} 
+                            placeholder="Edit generated content"
+                            rows={4}
+                            className="w-full h-30 p-2 bg-[#18181A] rounded-md text-white mb-4"
+                        />
+                        <Button
+                            text={hasExistingPrompt ? "Save prompt" : "Post now"}
+                            type="primary"
+                            onClick={hasExistingPrompt ? handleSavePrompt : () => tweetNow(editableContent)}
+                            children={false}
                         />
                     </div>
-                <div className="flex gap-2">
-                    <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-                        onClick={handleGenerate}
-                    >
-                        Generate and post tweet
-                    </button> 
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4">Schedule post</button>
-                </div>
-            </div>
-          )}  
+                ) : null}
         </>
     )
 };  
