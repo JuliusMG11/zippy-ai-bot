@@ -1,5 +1,5 @@
 import { firestore } from '../firebase.ts';
-import { addDoc, collection, getDocs, doc, getDoc, query, where, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, doc, query, where, updateDoc } from 'firebase/firestore';
 
 import { SchedulePrompt, GenerateTweet } from '../types/types';
 const db = firestore;

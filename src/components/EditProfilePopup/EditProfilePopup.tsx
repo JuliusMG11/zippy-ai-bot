@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { firestore } from '../../firebase.ts';
 import { TwitterInformation } from '../../types/types.ts';
 import Input from '../UI/Input/Input.tsx';
@@ -119,7 +119,7 @@ const EditProfilePopup: React.FC<EditProfilePopupProps> = ({ isOpen, onClose, ac
                         />
                         <Button
                             type="primary"
-                            text="Save"
+                            text={loading ? "Saving..." : "Save"}
                             onClick={handleSave}
                             icon={false}
                             children={null}
