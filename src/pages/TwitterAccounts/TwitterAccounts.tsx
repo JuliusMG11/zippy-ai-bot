@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import './twitterAccounts.css'
 
@@ -11,7 +11,7 @@ import  notyf from '../../utyls/notyfConfig.ts'
 
 import { TwitterInformation } from '../../types/types.ts';
 
-import Loader from '../../components/UI/Loader/Loader.tsx';
+// import Loader from '../../components/UI/Loader/Loader.tsx';
 import Input from '../../components/UI/Input/Input.tsx';
 import Button from '../../components/UI/Btn/Btn.tsx';
 
@@ -43,7 +43,7 @@ const TwitterAccounts = () => {
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 
-    const loadTwitterAccounts = (userId: string) => {
+    const loadTwitterAccounts = useCallback((userId: string) => {
         const accountsCollection = collection(db, `users/${userId}/twitter_accounts`);
         console.log(accountsCollection);
         const unsubscribeSnapshot = onSnapshot(accountsCollection, (snapshot) => {
@@ -52,7 +52,7 @@ const TwitterAccounts = () => {
         });
 
         return () => unsubscribeSnapshot(); // Clean up listener
-    };
+    }, [db]);
 
     const handleCreateAccount = async () => {
         if (user) {
@@ -110,7 +110,7 @@ const TwitterAccounts = () => {
         if (user) {
             loadTwitterAccounts(user.uid);
         }
-    }, [user]);
+    }, [user, loadTwitterAccounts]);
     
     return (
            <>
@@ -119,55 +119,59 @@ const TwitterAccounts = () => {
                         <div>
                             <h2 className="text-2xl font-bold pb-4 text-white">Create Twitter Account</h2>
                                 <div className="bg-[#27292B] rounded-2xl p-6 flex flex-col gap-4 shadow-[4px_4px_14px_2px_rgb(34,_34,_34,_0.6)] border-2 border-[#313131]">
-                                    <Input
-                                        label="Account name"
-                                        htmlFor="name"
-                                        type="text"
-                                        placeholder="Account name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                    <Input
-                                        label="Twitter App Key"
-                                        htmlFor="appKey"
-                                        type="text"
-                                        placeholder="Twitter App Key"
-                                        value={appKey}
-                                        onChange={(e) => setAppKey(e.target.value)}
-                                    />
-                                     <Input
-                                        label="Twitter App Secret"
-                                        htmlFor="appSecret"
-                                        type="text"
-                                        placeholder="Twitter App Secret"
-                                        value={appSecret}
-                                        onChange={(e) => setAppSecret(e.target.value)}
-                                    />
-
-                                    <Input
-                                        label="Twitter Access Token"
-                                        htmlFor="accessToken"
-                                        type="text"
-                                        placeholder="Twitter Access Token"
-                                        value={accessToken}
-                                        onChange={(e) => setAccessToken(e.target.value)}
-                                    />
-
-                                    <Input
-                                        label="Twitter Access Secret"
-                                        htmlFor="accessSecret"
-                                        type="text"
-                                        placeholder="Twitter Access Secret"
-                                        value={accessSecret}
-                                        onChange={(e) => setAccessSecret(e.target.value)}
-                                    />
-                                     <Button
-                                        icon={false}
-                                        text="Create Account"
-                                        type="primary"
-                                        onClick={handleCreateAccount}
-                                        children={null}
-                                    />
+                                    {loading ? (
+                                        <p className="text-white">Loading...</p>
+                                    ) : (
+                                        <>
+                                            <Input
+                                                label="Account name"
+                                                htmlFor="name"
+                                                type="text"
+                                                placeholder="Account name"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                            />
+                                            <Input
+                                                label="Twitter App Key"
+                                                htmlFor="appKey"
+                                                type="text"
+                                                placeholder="Twitter App Key"
+                                                value={appKey}
+                                                onChange={(e) => setAppKey(e.target.value)}
+                                            />
+                                            <Input
+                                                label="Twitter App Secret"
+                                                htmlFor="appSecret"
+                                                type="text"
+                                                placeholder="Twitter App Secret"
+                                                value={appSecret}
+                                                onChange={(e) => setAppSecret(e.target.value)}
+                                            />
+                                            <Input
+                                                label="Twitter Access Token"
+                                                htmlFor="accessToken"
+                                                type="text"
+                                                placeholder="Twitter Access Token"
+                                                value={accessToken}
+                                                onChange={(e) => setAccessToken(e.target.value)}
+                                            />
+                                            <Input
+                                                label="Twitter Access Secret"
+                                                htmlFor="accessSecret"
+                                                type="text"
+                                                placeholder="Twitter Access Secret"
+                                                value={accessSecret}
+                                                onChange={(e) => setAccessSecret(e.target.value)}
+                                            />
+                                            <Button
+                                                icon={false}
+                                                text={creating ? "Creating..." : "Create Account"}
+                                                type="primary"
+                                                onClick={handleCreateAccount}
+                                                children={null}
+                                            />
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         {user ? (

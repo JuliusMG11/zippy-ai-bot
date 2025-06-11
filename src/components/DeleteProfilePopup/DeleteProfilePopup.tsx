@@ -1,7 +1,7 @@
 import React from 'react';
 import { TwitterInformation } from '../../types/types.ts';
 import Button from '../UI/Btn/Btn.tsx';
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { firestore } from '../../firebase.ts';
 import notyf from '../../utyls/notyfConfig.ts';
 

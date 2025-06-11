@@ -30,9 +30,9 @@ const PromptSection = (
     //     console.log(schedule);
     // }
 
-    const handleTweetNow = () => {
-        tweetNow(editableContent);
-    }
+    // const handleTweetNow = () => {
+    //     tweetNow(editableContent);
+    // }
 
     useEffect(() => {
         const cleanContent = generatedContent.replace(/^["']|["']$/g, '');
