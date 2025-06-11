@@ -77,7 +77,7 @@ export const scheduledTweetGenerator = onSchedule("every 1 hours", async () => {
     console.log(`✅ Found ${snapshot.docs.length} scheduled tweets`);
 
     const openai = new OpenAI({ 
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: process.env.REACT_APP_OPENAI_API_KEY || '',
       dangerouslyAllowBrowser: true,
     });
 
