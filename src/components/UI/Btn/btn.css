@@ -4,19 +4,44 @@
     border-radius: 32px;
     font-weight: bold;
     min-width: 120px;
-    width: 100%;
+    width: max-content;
     outline: none;
 }
 
-.btn.primary {
-    background-color: #007bff;
-    color: white;
-    border: solid 2px #007bff;
+.btn.icon {
+    padding: 2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: unset;
 }
 
-.btn.primary:hover {
-    background-color: #ffffff;
-    color: #007bff;
+
+.btn.primary,
+.btn.icon.primary  {
+    background-color: #5426FF;
+    color: white;
+    border: solid 2px #858585;
+}
+
+.btn.primary:hover,
+.btn.icon.primary:hover {
+    background-color: #7752FE;
+}
+
+.btn.secondary,
+.btn.icon.btn.secondary  {
+    background-color: #4E5051;
+    color: white;
+    border: solid 2px #858585;
+}
+
+.btn.secondary:hover,
+.btn.icon.btn.secondary:hover {
+    background-color: #858585;
 }
 
 .btn.outline {

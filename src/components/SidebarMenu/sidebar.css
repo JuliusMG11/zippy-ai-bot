@@ -1,9 +1,11 @@
 .sidebar {
-    height: 100vh;
-    background-color: #f0f0f0;
+    height:  100%;
+    background-color: #27292B;
     border-radius: 22px;
     padding: 20px;
-    width: 200px;
+    width: 240px;
+    position: sticky;
+    top: 0px;
 }
 
 .sidebar-logo {
@@ -15,17 +17,26 @@
     display: block;
     padding: 10px;
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     border-radius: 8px;
     font-weight: bold;
-    transition: all ease .3s;
+    border: 1px solid #27292B;
 }
+
+.sidebar a.active {
+    background-color: #7752FE;
+    border: 1px solid #5426FF;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: bold;
+}  
+
 
 .sidebar a.active,
 .sidebar a:hover {
-    background-color: #007bff;
+    background-color: #5426FF;
+    border: 1px solid #5426FF;
     color: #ffffff;
     border-radius: 8px;
-    transition: all ease .3s;
     font-weight: bold;
 }  
